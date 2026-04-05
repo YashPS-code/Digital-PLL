@@ -1,1 +1,4 @@
 /db
+Digital_PLL.qsf
+Digital_PLL.qpf
+*.bak.v
