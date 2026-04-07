@@ -1,5 +1,0 @@
-module test_pll;
-input in_signal;
-output out_signal;
-
-endmodule
