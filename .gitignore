@@ -1,4 +1,9 @@
 /db
-Digital_PLL.qsf
+/simulation
+/incremental_db
+/output_files
+*.v.bak
+*.rpt
 Digital_PLL.qpf
-*.bak.v
+Digital_PLL.qsf
+Digital_PLL.qws
