@@ -6,23 +6,29 @@ module dpll(
 );
 
 wire nco_fb;
-wire [ 1: 0] pd_out;
+wire phase_err;
 
 phase_detect pd(                // Phase Detector
     .clk(clk),
     .rst_n(rst_n),
     .ref_freq(in_signal),
     .nco_fb(nco_fb),
-    .pd_out(pd_out)
+    .phase_err(phase_err)
 );
 
+wire [12:0] corr_val;
+
 lpf lpf(                        // Low Pass Filter
-    .clk(clk)
+    .clk(clk),
+    .rst_n(rst_n),
+    .phase_err(phase_err),
+    .corr_val(corr_val)
 );
 
 nco nco(                        // Numerically Controlled Oscillator
     .clk(clk),
-
+    .rst_n(rst_n),
+    .corr_val(corr_val),
     .gen_freq(nco_fb)
 );
 

@@ -24,7 +24,7 @@ module test_dpll;
     initial begin
         clk = 0;
         freq = 16;
-        forever #5 clk <= ~clk;
+        forever #1 clk <= ~clk;
     end
 
     initial begin
@@ -38,7 +38,7 @@ module test_dpll;
         #55
         for(i = 0; i < 30; i = i + 1) begin
             freq = freq + 8;
-            repeat(20) begin
+            repeat(35) begin
                 delay = freq + $urandom_range(0, 8);
                 #(delay) in_signal = ~in_signal;
             end
@@ -70,7 +70,7 @@ module test_dpll;
     end
 
     initial begin
-        #5000;
+        #10_000;
         $display("Simulation Ending.....");
         $stop;
     end
