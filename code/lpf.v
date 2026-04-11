@@ -1,45 +1,34 @@
 module lpf #(
-    parameter Kp = 10'd5,
-    parameter Ki = 10'd6
+    parameter Kp = 10'b000_1000000,   //Q4.6
+    parameter Ki = 10'b0_000001000    //Q1.9
 )(
     input clk,
     input rst_n,
-    input phase_err,
-    output [12:0] corr_val   //2^13
+    input [5:0] phase_err,
+    output [10:0] corr_val
 );
 
-reg [15:0] n_err, prev_err;
-reg [15:0] counter;
-reg [26:0] p_val;
-reg [40:0] err_sum;
-reg [41:0] i_val;
-reg [41:0] pid_val;
+wire [9:0] i_val, p_val;
 
-always @(posedge clk) begin
-    if(!rst_n) begin
-        counter <= 0;
-        n_err <= 0;
-    end else begin
-        counter <= counter + 1'b1;
-        if(phase_err) n_err <= n_err + 1'b1;
-    end
+wire [15:0] p_val_temp;
+assign p_val_temp = Kp*phase_err;
+assign p_val = {p_val_temp[15:6]};
+
+wire [15:0] i_val_temp1;
+wire [9:0] i_val_temp2;
+reg [9:0] i_val_temp3;
+assign i_val_temp1 = Ki*phase_err;
+assign i_val_temp2 = {i_val_temp1[15:6]};
+
+always @(posedge clk or negedge rst_n) begin
+    if(!rst_n)
+        i_val_temp3 <= 0;
+    else
+        i_val_temp3 <= i_val_temp2 + i_val_temp3;
 end
 
-always @(posedge clk) begin
-    if(!rst_n) begin
-        p_val <= 0;
-        prev_err <= 0;
-        err_sum <= 0;
-        i_val <= 0;
-        pid_val <= 0;
-    end else begin
-        p_val <= Kp*n_err;
-        prev_err <= n_err;
-        err_sum <= err_sum + n_err;
-        i_val <= Ki*err_sum;
-        pid_val <= p_val + i_val;
-    end
-end
+assign i_val = {3'd0, i_val_temp3[9:3]};
 
-assign corr_val = pid_val >> 28;
+assign corr_val = i_val + p_val;
+
 endmodule

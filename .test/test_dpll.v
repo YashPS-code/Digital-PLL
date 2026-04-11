@@ -5,12 +5,16 @@ module test_dpll;
     reg rst_n;
     reg in_signal;
     wire out_signal;
+    wire [10:0] corr_val;
+    wire [5:0] phase;
 
     dpll utt(
         .clk(clk),
         .rst_n(rst_n),
         .in_signal(in_signal),
-        .out_signal(out_signal)
+        .out_signal(out_signal),
+        .corr_val1(corr_val),
+        .phaseer(phase)
     );
 
     integer delay;
@@ -35,13 +39,14 @@ module test_dpll;
 
     initial begin
         in_signal = 0;
-        #55
-        for(i = 0; i < 30; i = i + 1) begin
-            freq = freq + 8;
+        #50
+        for(i = 0; i < 15; i = i + 1) begin
             repeat(35) begin
-                delay = freq + $urandom_range(0, 8);
-                #(delay) in_signal = ~in_signal;
+                in_signal = ~in_signal;
+                delay = freq + $urandom_range(0, 6);
+                #(delay);
             end
+            freq = freq + 8;
         end
     end
 
@@ -70,7 +75,7 @@ module test_dpll;
     end
 
     initial begin
-        #10_000;
+        #40_000;
         $display("Simulation Ending.....");
         $stop;
     end

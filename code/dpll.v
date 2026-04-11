@@ -2,11 +2,14 @@ module dpll(
     input clk,
     input rst_n,
     input in_signal,
-    output out_signal
+    output out_signal,
+    output [10:0] corr_val1,
+    output [5:0] phaseer
 );
 
 wire nco_fb;
-wire phase_err;
+wire [5:0] phase_err;
+assign phaseer = phase_err;
 
 phase_detect pd(                // Phase Detector
     .clk(clk),
@@ -16,7 +19,8 @@ phase_detect pd(                // Phase Detector
     .phase_err(phase_err)
 );
 
-wire [12:0] corr_val;
+wire [10:0] corr_val;
+assign corr_val1 = corr_val;
 
 lpf lpf(                        // Low Pass Filter
     .clk(clk),

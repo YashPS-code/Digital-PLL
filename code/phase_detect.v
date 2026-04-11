@@ -3,16 +3,24 @@ module phase_detect(
     input rst_n,
     input ref_freq,         // Reference Frequency
     input nco_fb,           // NCO Feedback
-    output reg phase_err
+    output reg [5:0] phase_err
 );
 
 // XOR Detector
 
+reg [5:0] samp_cnt, err_cnt;
+
 always @(posedge clk) begin
     if(!rst_n) begin
-        phase_err <= 0;
+        samp_cnt <= 0;
+        err_cnt <= 0;
     end else begin
-        phase_err <= nco_fb ^ ref_freq;
+        samp_cnt <= samp_cnt + 1'b1;
+        if(nco_fb ^ ref_freq) err_cnt <= err_cnt + 1'b1;
+        if(&samp_cnt) begin
+            err_cnt <= 0;
+            phase_err <= err_cnt;
+        end
     end
 end
 
