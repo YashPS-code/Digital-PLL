@@ -29,8 +29,8 @@ Clock frequencies: 10-100 MHz reference.</br>
 └── README.md           # This file</br>
 
 <h1>Result</h1>
-![DPLL Output](images/image1.png)
-![DPLL Output](images/image2.png)
+![DPLL Output](/images/image1.png)
+![DPLL Output](/images/image2.png)
 
 <h1>Theory of Operation</h1>
 Phase Detection: XOR produces pulses proportional to phase error Δφ. A sample is then obtained periodically to determine the average phase error in a unit sample.</br>
