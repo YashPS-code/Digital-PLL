@@ -3,12 +3,12 @@ module nco #(
 )(
     input clk,
     input rst_n,
-    input [10:0] corr_val,
+    input signed [20:0] corr_val,
     output reg gen_freq
 );
 
-reg [10:0] counter;
-wire [10:0] new_freq;
+reg [20:0] counter;
+wire signed [20:0] new_freq;
 
 assign new_freq = base_freq + corr_val;
 
@@ -17,7 +17,7 @@ always @(posedge clk) begin
         counter <= 0;
         gen_freq <= 0;
     end else begin
-        if(counter >= new_freq) begin
+        if(counter >= {new_freq[9:0]}) begin
             gen_freq <= ~gen_freq;
             counter <= 0;
         end else counter <= counter + 1'b1;

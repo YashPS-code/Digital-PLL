@@ -1,4 +1,4 @@
-<i><b>This repository provides a Verilog implementation of a fully digital Phase Locked Loop (PLL) using a XOR gate as the phase detector. The design targets FPGA for clock generation, recovery, or synchronization applications.</i></b>
+<i><b>This repository provides a Verilog implementation of a fully digital Phase Locked Loop (PLL) using a XOR gate as the phase detector. The design targets FPGA for clock generation, recovery, or synchronization applications.</b></i>
 
 <h1>Overview</h1>
 A digital PLL locks an output clock to a reference clock by detecting phase differences between reference and feedback signals. The phase error drives a loop filter, which controls a digital numerically-controlled oscillator to adjust frequency and phase.
@@ -18,7 +18,7 @@ Clock frequencies: 10-100 MHz reference.</br>
 
 <h1>File Structure</h1>
 
-<b>Digital-PLL</b>
+<b>Digital-PLL</b></br>
 ├── code/</br>
 │   ├── dpll.v          # Top-level module</br>
 │   ├── phase_detect.v  # Phase detection with XOR</br>
@@ -31,6 +31,7 @@ Clock frequencies: 10-100 MHz reference.</br>
 
 <h1>Theory of Operation</h1>
 Phase Detection: XOR produces pulses proportional to phase error Δφ. A sample is then obtained periodically to determine the average phase error in a unit sample.</br>
+
 
 Loop Filter: error output is smoothened via a pi control filter.</br>
 
