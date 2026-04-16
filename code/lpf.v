@@ -1,7 +1,8 @@
 module lpf(
     input clk,
     input rst_n,
-    input phase_err,
+    input up,
+    input down,
     input signed [9:0] Kp, //Q4.6
     input signed [9:0] Ki, //Q1.9
     output signed [20:0] corr_val
@@ -13,8 +14,8 @@ always @(posedge clk or negedge rst_n) begin
     if(!rst_n) begin
         avg_phase <= 0;
     end else begin
-        if(phase_err) avg_phase <= avg_phase + 1'b1;
-        else avg_phase <= avg_phase - 1'b1;
+        if(up) avg_phase <= avg_phase - 1'b1;
+        else if(down) avg_phase <= avg_phase + 1'b1;
     end
 end
 

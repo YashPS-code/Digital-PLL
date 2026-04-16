@@ -5,17 +5,20 @@ module test_dpll;
     reg rst_n;
     reg in_signal;
     wire out_signal;
-    wire [10:0] cor_val;
 
     dpll utt(
         .clk(clk),
         .rst_n(rst_n),
         .in_signal(in_signal),
         .out_signal(out_signal),
-        .cor_val(cor_val)
+        .up(up),
+        .down(down)
     );
 
     integer delay;
+    integer lock_count = 0;
+    integer unlock_count = 0;
+    integer prev_lock_cnt = 0;
     integer i;
     integer freq;
     time t_in = 0, t_out = 0;
@@ -35,8 +38,8 @@ module test_dpll;
     initial begin
         in_signal = 0;
         #50
-        for(i = 0; i < 12; i = i + 1) begin
-            repeat(50) begin
+        for(i = 0; i < 15; i = i + 1) begin
+            repeat(35) begin
                 in_signal = ~in_signal;
                 delay = freq + $urandom_range(0, 6);
                 #(delay);
@@ -53,9 +56,24 @@ module test_dpll;
         t_out <= $time;
         $display("Phase error = %0t", t_out - t_in);
     end
-    
+
+    always @(posedge clk) begin
+        if(t_in > 0) begin
+            if((t_out - t_in) < 64'd10) lock_count <= lock_count + 1;
+            else begin
+                lock_count <= 0;
+                unlock_count <= unlock_count + 1;
+            end
+        end
+
+        if(lock_count > 100) begin
+            if(prev_lock_cnt != unlock_count) $display("Lock at %0t", $time);
+            prev_lock_cnt <= unlock_count;
+        end
+    end
+
     initial begin
-        #37_880;
+        #40_000;
         $display("Simulation Ending.....");
         $stop;
     end

@@ -1,11 +1,11 @@
-<i><b>This repository provides a Verilog implementation of a fully digital Phase Locked Loop (PLL) using a XOR gate as the phase detector. The design targets FPGA for clock generation, recovery, or synchronization applications.</b></i>
+<i><b>This repository provides a Verilog implementation of a fully digital Phase Locked Loop (PLL) using a Phase Frequency Detector. The design targets FPGA for clock generation, recovery, or synchronization applications.</b></i>
 
 <h1>Overview</h1>
 A digital PLL locks an output clock to a reference clock by detecting phase differences between reference and feedback signals. The phase error drives a loop filter, which controls a digital numerically-controlled oscillator to adjust frequency and phase.
 
 <h1>Key Components</h1>
 
-<b>XOR Phase Detector</b>: Outputs XOR operation between reference and feedback signals.</br>
+<b>Phase Frequency Detector</b>: Outputs two signals UP and DOWN. Essentially two D flip flops taking ref_freq and nco_fb as their inputs respectively and are reset when both output high.</br>
 
 <b>Loop Filter</b>: Proportional + Integral (PI) controller for stability.</br>
 
@@ -14,7 +14,7 @@ A digital PLL locks an output clock to a reference clock by detecting phase diff
 <h1>Features</h1>
 Configurable loop filter gains (Kp, Ki).</br>
 Lock detect indicator.</br>
-Clock frequencies: 10-100 MHz reference.</br>
+Clock frequencies: 10-500 MHz reference.</br>
 
 <h1>File Structure</h1>
 
@@ -28,21 +28,25 @@ Clock frequencies: 10-100 MHz reference.</br>
 │   ├── test_dpll.v     # Testbench with reference clock generator</br>
 └── README.md           # This file</br>
 
+<!--
 <h1>Result</h1>
 <img src="images/image1.png">
 <img src="images/image2.png">
 <p><i><b>*</b>The following result shows a 90° phase shift as expected out of a XOR gate detector.</i></p>
+-->
 
 <h1>Theory of Operation</h1>
-Phase Detection: XOR produces pulses proportional to phase error Δφ. A sample is then obtained periodically to determine the average phase error in a unit sample.</br>
-Loop Filter: error output is smoothened via a pi control filter.</br>
+Phase Detection: A Phase Frequency Detector (PFD) generates UP and DOWN pulses whose widths are proportional to the phase (and frequency) difference Δ𝜙 between the reference and feedback signals.</br>
+Loop Filter: These pulses are then integrated (averaged) by the loop filter to produce a control signal representing the average phase error and error output is smoothened via a pi control filter.</br>
 NCO: Base Frequency is adjusted in accordance to the filtered error output.</br>
 Locking: Steady-state when f_ref ≈ f_nco and phase error(Δφ) ≈ 0. </br>
 
+<!--
 <h3>Limitations</h3>
 XOR PI limited to 0-90° error range; use for narrowband applications.</br>
 No spread-spectrum or fine freq steps.</br>
 Metastability risk in async XOR; add synchronizers for >500MHz.
+-->
 
 <!--
 Phase Detection: XOR produces pulses proportional to phase error Δφ. Average duty cycle ~ Δφ/180°.</br>
