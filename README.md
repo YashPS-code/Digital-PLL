@@ -37,7 +37,7 @@ Clock frequencies: 10-100 MHz reference.</br>
 Phase Detection: XOR produces pulses proportional to phase error Δφ. A sample is then obtained periodically to determine the average phase error in a unit sample.</br>
 Loop Filter: error output is smoothened via a pi control filter.</br>
 NCO: Base Frequency is adjusted in accordance to the filtered error output.</br>
-Locking: Steady-state when f_ref ≈ f_nco and phase error(Δφ) ≈ 0. </br>
+Locking: Steady-state when f_ref ≈ f_nco and phase error(Δφ) ≈ 90°. </br>
 
 <h3>Limitations</h3>
 XOR PI limited to 0-90° error range; use for narrowband applications.</br>
